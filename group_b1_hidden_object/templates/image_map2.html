@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hidden Object Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='web_design.css') }}">
+    <link rel="icon" href="/static/favicon.jpeg" type="image/x-icon">
+
+<script>
+    var original_height = {{original_height}};
+    var original_width = {{original_width}};
+    var object_data_list = {{ object_data_list | tojson | safe }};
+
+    function handleImageLoad() {
+        var img = document.getElementById('gameImage');
+        var resized_width = img.width;
+        var resized_height = img.height;
+
+        for (var i = 0; i < object_data_list.length; i++) {
+            var x_coordinates_i = object_data_list[i]['x_coordinates'];
+            var y_coordinates_i = object_data_list[i]['y_coordinates'];
+            var top_left_x_i = object_data_list[i]['top_left_x'];
+            var top_left_y_i = object_data_list[i]['top_left_y'];
+            var bottom_right_x_i = object_data_list[i]['bottom_right_x'];
+            var bottom_right_y_i = object_data_list[i]['bottom_right_y'];
+
+            var mid_x_i = (x_coordinates_i / original_width) * resized_width;
+            var mid_y_i = (y_coordinates_i / original_height) * resized_height;
+            var top_left_x_res_i = (top_left_x_i / original_width) * resized_width;
+            var top_left_y_res_i = (top_left_y_i / original_height) * resized_height;
+            var bottom_right_x_res_i = (bottom_right_x_i / original_width) * resized_width;
+            var bottom_right_y_res_i = (bottom_right_y_i / original_height) * resized_height;
+
+            // Calculate the width and height for each area relative to each object
+            var width_i = bottom_right_x_res_i - top_left_x_res_i;
+            var height_i = bottom_right_y_res_i - top_left_y_res_i;
+
+            var areaElement = document.getElementById('area' + (i + 1));
+
+
+            // Set the style for each area using calculated width and height
+            document.getElementById('area' + (i + 1)).style.top = top_left_y_res_i + 'px';
+            document.getElementById('area' + (i + 1)).style.left = top_left_x_res_i + 'px';
+            document.getElementById('area' + (i + 1)).style.width = width_i + 'px';
+            document.getElementById('area' + (i + 1)).style.height = height_i + 'px';
+        }
+    }
+
+    // Call handleImageLoad when the image is loaded
+    window.addEventListener('load', handleImageLoad);
+
+    //Add timer
+    var seconds = 0;
+        var timer;
+
+        function updateTimer() {
+            document.getElementById('timer').innerText = seconds + 's';
+            seconds++;
+        }
+
+        function startTimer() {
+            updateTimer();
+
+            timer = setInterval(updateTimer, 1000); // Update every 1 second
+        }
+
+        // Call startTimer when the image is loaded
+        window.addEventListener('load', startTimer);
+
+        function showSolution() {
+            // Areas become visible
+            for (var i = 0; i < object_data_list.length; i++) {
+                var area = document.getElementById('area' + (i + 1));
+                area.style.opacity = '0.5';
+                area.onclick = false;
+                var areaBackgroundColor = area.style.backgroundColor;
+
+                // Update button labels with area labels and set background color
+                var button = document.getElementById('button' + (i + 1));
+                var areaLabel = object_data_list[i]['label_data'];
+                button.innerText = areaLabel;
+                button.style.backgroundColor = areaBackgroundColor;
+                button.style.opacity = 0.7;
+                button.style.color = 'black';
+            }
+
+            // Enable and show the "Next" button
+            var nextButton = document.getElementById('exitgame');
+            nextButton.disabled = false;
+            nextButton.style.display = 'inline-block';
+        }
+
+        // Function to handle the Next button click
+        function handleNextButtonClick() {
+        window.location.href = '/success2';
+        }
+
+
+</script>
+
+</head>
+<body>
+    <div class="row">
+        <header class="col-12">
+            <div class="headerpadding">
+                <img id="headerimage" src="/static/rijksstudio.png" alt="logo">
+                <h1>Hidden Object Game</h1>
+            </div>
+        </header>
+    </div>
+    <div class="row menu">
+        <nav>
+            <ul>
+            <li class="col-2 active">
+                <a href="/">Home</a>
+            </li>
+            <li class="col-2 active">
+                <a onclick="showSolution()">Solution</a>
+            </li>
+            <li class="col-4 active">
+                <a class="timerstyle">Time spent: <span id="timer"></span></a>
+            </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <div id="container">
+                <img id="gameImage" src="/static/SK-A-4821.jpg" alt="Your Image" onload="handleImageLoad()">
+
+                <div id="area1" class="colored-area" onclick="handleAreaClick('button1')" style="top: 0px; left: 0px; width: 100px; height: 100px; background-color: rgb(247, 107, 107);"></div>
+                <div id="area2" class="colored-area" onclick="handleAreaClick('button2')" style="top: 100px; left: 100px; width: 100px; height: 100px; background-color: rgb(137, 137, 255);"></div>
+                <div id="area3" class="colored-area" onclick="handleAreaClick('button3')" style="top: 150px; left: 150px; width: 100px; height: 100px; background-color: rgb(142, 255, 142);"></div>
+                <div id="area4" class="colored-area" onclick="handleAreaClick('button4')" style="top: 200px; left: 200px; width: 100px; height: 100px; background-color: rgb(255, 255, 164);"></div>
+                <div id="area5" class="colored-area" onclick="handleAreaClick('button5')" style="top: 250px; left: 250px; width: 100px; height: 100px; background-color: rgb(255, 158, 255);"></div>
+                <div>  
+                    <p class="art_information">
+                        {{title}} by {{artist}}
+                    </p>
+                </div>  
+            </div>
+        </div> <!-- 8/12 -->
+        <div class="col-4 buttonbox">
+            <button id="button1" class="button">{{riddle1}}</button>
+            <button id="button2" class="button">{{riddle2}}</button>
+            <button id="button3" class="button">{{riddle3}}</button>
+            <button id="button4" class="button">{{riddle4}}</button>
+            <button id="button5" class="button">{{riddle5}}</button>
+            <button id="exitgame" class="button" onclick="handleNextButtonClick()" disabled style="display: none;">Next</button>
+
+        </div> <!-- 4/12 -->
+        <script>
+
+            var points = 0;
+            // Function to handle area click
+            function handleAreaClick(buttonId) {
+                // Add the 'green-button' class to the clicked button
+                var button = document.getElementById(buttonId);
+                button.classList.add('green-button');
+                
+
+                // Set the opacity of the clicked area to 0.3
+                var area = document.getElementById('area' + buttonId.slice(-1)); // Extract the numeric part from buttonId
+                area.style.opacity = '0.7';
+                area.style.backgroundColor = 'green';
+               
+                // Switch the button text from riddle to object label
+                var areaIndex = parseInt(buttonId.slice(-1)) - 1; // Convert buttonId to array index
+                var areaLabel = object_data_list[areaIndex]['label_data'];
+                button.innerText = areaLabel;
+                
+                //Count the points
+                points++;
+
+                area.onclick = false;
+                
+                if (points==5){
+                    sessionStorage.setItem('timerValue', seconds); 
+                    sessionStorage.setItem('pointsValue', points); 
+                    window.location.href = '/success2';
+                }
+
+                }
+
+            function handleImageClick(event) {
+                // Get the coordinates of the click relative to the image
+                var x = event.clientX - document.getElementById('gameImage').getBoundingClientRect().left;
+                var y = event.clientY - document.getElementById('gameImage').getBoundingClientRect().top;
+
+                // Check if the click is within any of the areas
+                var clickedOnArea = false;
+                for (var i = 0; i < object_data_list.length; i++) {
+                    var area = document.getElementById('area' + (i + 1));
+                    var areaRect = area.getBoundingClientRect();
+
+                    if (x >= areaRect.left && x <= areaRect.right && y >= areaRect.top && y <= areaRect.bottom) {
+                        clickedOnArea = true;
+                        break;
+                    }
+                }
+
+                // If not clicked on any area, add 10 seconds to the timer
+                if (!clickedOnArea) {
+                    seconds += 10;
+                    updateTimer();  // Update the timer display
+                    alert("Unfortunately, that's not the object we are looking for. We added a 10 second penalty to your time. Keep looking!");
+                }
+            }
+
+            // Add click event listener to the image
+            document.getElementById('gameImage').addEventListener('click', handleImageClick);
+
+        </script>
+      </div>
+</body>
+</html>

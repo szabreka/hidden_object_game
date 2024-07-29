@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='web_design.css') }}">
+    <title>Hidden Object Game - You won</title>
+    <link rel="icon" href="/static/favicon.jpeg" type="image/x-icon">
+    <style>
+
+    </style>
+    <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/hu_HU/sdk.js#xfbml=1&version=v18.0" nonce="JO5Kqs00"></script>
+<script>
+        // Function to handle the Next button click
+        function handleNextPuzzleButtonClick() {
+        window.location.href = '/newgame';
+        }
+</script>
+</head>
+<body>
+    <div class="row">
+        <header class="col-12">
+            <div class="headerpadding">
+                <img id="headerimage" src="/static/rijksstudio.png" alt="logo">
+                <h1>Congratulations, you did it!</h1>
+            </div>
+        </header>
+    </div>
+    <div class="row menu">
+        <nav>
+            <ul>
+            <li class="col-2 active">
+                <a href="/">Home</a>
+            </li>
+            <li class="col-2 active">
+                <a href="https://www.rijksmuseum.nl/en/rijksstudio">Rijksstudio</a>
+            </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-6"> 
+            <h2>Congratulations!</h2>
+            <p>You've successfully found all hidden objects within the painting. Now, let's dive deeper into the artwork!</p>
+            <p>{{description}}</p>
+            <h2>Your Discovery Time: <span id="timer">{{ timerValue }}</span></h2>
+            <p>Share your results with others and challenge them to uncover the painting!</p>
+            <div class="fb-share-button" data-href="http://127.0.0.1:5000/" data-layout="" data-size="">
+                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2F127.0.0.1%3A5000%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share with your friends!</a>
+            </div>
+            <button id="newgame" class="button" onclick="handleNextPuzzleButtonClick()">Next Puzzle</button>
+        </div>
+        <script>
+            // Retrieve the timer value from sessionStorage
+            var timerValue = sessionStorage.getItem('timerValue');
+    
+            // Display the timer value
+            document.getElementById('timer').innerText = timerValue + 's';
+        </script>
+        <div class="col-6">
+            <img id="gameImage" src="/static/SK-C-229.jpg" alt="Painting">
+        </div>
+    </div>
+</body>
+</html>
