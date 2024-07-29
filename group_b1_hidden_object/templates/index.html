@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='web_design.css') }}">
+    <title>Hidden Object Game - Start</title>
+    <link rel="icon" href="/static/favicon.jpeg" type="image/x-icon">
+</head>
+<body>
+    <div class="row">
+        <header class="col-12">
+            <div class="headerpadding">
+                <img id="headerimage" src="/static/rijksstudio.png" alt="logo">
+                <h1>Welcome to the Hidden Object Game!</h1>
+            </div>
+        </header>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <h2>How to Play the Hidden Object Game</h2>
+            <p>Explore the world of art and solve riddles to uncover hidden objects within famous paintings from the Rijksmuseum. Follow these simple rules to enjoy the game:</p>
+            <ol>
+                <li><strong>Solve the Riddle:</strong> Each object is represented by a unique riddle. Solve the riddle to unveil the hidden object.</li>
+                <li><strong>Search the Painting:</strong> Examine the painting to find the hidden object. Be observant, as there might be multiple occurrences, but we're looking for just one of them.</li>
+                <li><strong>Click to Reveal:</strong> Once you spot the hidden object, click on it to reveal its details.</li>
+                <li><strong>Discover the Artwork:</strong> Learn more about the artwork displayed in the Rijksmuseum. Each painting has a story to tell, and every hidden object is a piece of that narrative.</li>
+            </ol>
+            <p>Challenge yourself, enjoy the beauty of art, and have fun uncovering the secrets within the frames!</p>
+        </div>
+        <div class="col-6">
+            <button id="startButton" onclick="startGame()">Start Game</button>
+            <script>
+                function startGame() {
+                    window.location.href = '/game';
+                }
+            </script>
+        </div>
+    </div>
+</body>
+</html>
